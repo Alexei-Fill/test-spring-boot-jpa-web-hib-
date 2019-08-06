@@ -1,0 +1,371 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.4
+-- Dumped by pg_dump version 11.4
+
+-- Started on 2019-08-06 17:00:45
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 6 (class 2615 OID 16394)
+-- Name: questioner; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA questioner;
+
+
+ALTER SCHEMA questioner OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 200 (class 1259 OID 16408)
+-- Name: answers; Type: TABLE; Schema: questioner; Owner: postgres
+--
+
+CREATE TABLE questioner.answers (
+    a_id integer NOT NULL,
+    q_id bigint NOT NULL,
+    a_text character varying NOT NULL,
+    a_score integer NOT NULL
+);
+
+
+ALTER TABLE questioner.answers OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 16406)
+-- Name: answers_a_id_seq; Type: SEQUENCE; Schema: questioner; Owner: postgres
+--
+
+CREATE SEQUENCE questioner.answers_a_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE questioner.answers_a_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2855 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: answers_a_id_seq; Type: SEQUENCE OWNED BY; Schema: questioner; Owner: postgres
+--
+
+ALTER SEQUENCE questioner.answers_a_id_seq OWNED BY questioner.answers.a_id;
+
+
+--
+-- TOC entry 198 (class 1259 OID 16397)
+-- Name: questions; Type: TABLE; Schema: questioner; Owner: postgres
+--
+
+CREATE TABLE questioner.questions (
+    q_id integer NOT NULL,
+    q_text character varying NOT NULL
+);
+
+
+ALTER TABLE questioner.questions OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 16395)
+-- Name: questions_q_id_seq; Type: SEQUENCE; Schema: questioner; Owner: postgres
+--
+
+CREATE SEQUENCE questioner.questions_q_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE questioner.questions_q_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2856 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: questions_q_id_seq; Type: SEQUENCE OWNED BY; Schema: questioner; Owner: postgres
+--
+
+ALTER SEQUENCE questioner.questions_q_id_seq OWNED BY questioner.questions.q_id;
+
+
+--
+-- TOC entry 204 (class 1259 OID 16430)
+-- Name: result_description; Type: TABLE; Schema: questioner; Owner: postgres
+--
+
+CREATE TABLE questioner.result_description (
+    rd_id integer NOT NULL,
+    rd_min integer NOT NULL,
+    rd_max integer NOT NULL,
+    rd_text character varying NOT NULL
+);
+
+
+ALTER TABLE questioner.result_description OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 16428)
+-- Name: result_description_rd_id_seq; Type: SEQUENCE; Schema: questioner; Owner: postgres
+--
+
+CREATE SEQUENCE questioner.result_description_rd_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE questioner.result_description_rd_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2857 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: result_description_rd_id_seq; Type: SEQUENCE OWNED BY; Schema: questioner; Owner: postgres
+--
+
+ALTER SEQUENCE questioner.result_description_rd_id_seq OWNED BY questioner.result_description.rd_id;
+
+
+--
+-- TOC entry 202 (class 1259 OID 16419)
+-- Name: results; Type: TABLE; Schema: questioner; Owner: postgres
+--
+
+CREATE TABLE questioner.results (
+    r_id integer NOT NULL,
+    name character varying NOT NULL,
+    q_id bigint NOT NULL,
+    a_id bigint NOT NULL
+);
+
+
+ALTER TABLE questioner.results OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 16417)
+-- Name: results_r_id_seq; Type: SEQUENCE; Schema: questioner; Owner: postgres
+--
+
+CREATE SEQUENCE questioner.results_r_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE questioner.results_r_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2858 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: results_r_id_seq; Type: SEQUENCE OWNED BY; Schema: questioner; Owner: postgres
+--
+
+ALTER SEQUENCE questioner.results_r_id_seq OWNED BY questioner.results.r_id;
+
+
+--
+-- TOC entry 2709 (class 2604 OID 16411)
+-- Name: answers a_id; Type: DEFAULT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.answers ALTER COLUMN a_id SET DEFAULT nextval('questioner.answers_a_id_seq'::regclass);
+
+
+--
+-- TOC entry 2708 (class 2604 OID 16400)
+-- Name: questions q_id; Type: DEFAULT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.questions ALTER COLUMN q_id SET DEFAULT nextval('questioner.questions_q_id_seq'::regclass);
+
+
+--
+-- TOC entry 2711 (class 2604 OID 16433)
+-- Name: result_description rd_id; Type: DEFAULT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.result_description ALTER COLUMN rd_id SET DEFAULT nextval('questioner.result_description_rd_id_seq'::regclass);
+
+
+--
+-- TOC entry 2710 (class 2604 OID 16422)
+-- Name: results r_id; Type: DEFAULT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.results ALTER COLUMN r_id SET DEFAULT nextval('questioner.results_r_id_seq'::regclass);
+
+
+--
+-- TOC entry 2845 (class 0 OID 16408)
+-- Dependencies: 200
+-- Data for Name: answers; Type: TABLE DATA; Schema: questioner; Owner: postgres
+--
+
+COPY questioner.answers (a_id, q_id, a_text, a_score) FROM stdin;
+13	4	Колбасой вверх	1
+14	4	Колбасой вниз	2
+15	4	Я не ем колбасу	0
+16	4	Не знаю	0
+17	5	3	1
+18	5	8	1
+19	5	38	2
+20	5	40	0
+26	6	20:08:18	100
+28	6	Что это?	0
+30	6	20:08:16	2
+31	6	25:00:18	1
+\.
+
+
+--
+-- TOC entry 2843 (class 0 OID 16397)
+-- Dependencies: 198
+-- Data for Name: questions; Type: TABLE DATA; Schema: questioner; Owner: postgres
+--
+
+COPY questioner.questions (q_id, q_text) FROM stdin;
+4	Как правильно есть бутерброд?
+5	Сколько попугаев в питоне?
+6	Сегодня 6/8/19. Время 16:42. Сколько времени до WOW Classic?
+\.
+
+
+--
+-- TOC entry 2849 (class 0 OID 16430)
+-- Dependencies: 204
+-- Data for Name: result_description; Type: TABLE DATA; Schema: questioner; Owner: postgres
+--
+
+COPY questioner.result_description (rd_id, rd_min, rd_max, rd_text) FROM stdin;
+4	0	3	Ты тупенький. беееееееееееееесит. Удачи
+6	3	6	Ты довольно хорош. грац. удачи!
+8	6	110	Долбаный задротю запомни раз и навсегд Орда сосет. а так удачи и иди займись делом уже
+\.
+
+
+--
+-- TOC entry 2847 (class 0 OID 16419)
+-- Dependencies: 202
+-- Data for Name: results; Type: TABLE DATA; Schema: questioner; Owner: postgres
+--
+
+COPY questioner.results (r_id, name, q_id, a_id) FROM stdin;
+52	Alex	6	26
+53	Alex	6	26
+\.
+
+
+--
+-- TOC entry 2859 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: answers_a_id_seq; Type: SEQUENCE SET; Schema: questioner; Owner: postgres
+--
+
+SELECT pg_catalog.setval('questioner.answers_a_id_seq', 31, true);
+
+
+--
+-- TOC entry 2860 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: questions_q_id_seq; Type: SEQUENCE SET; Schema: questioner; Owner: postgres
+--
+
+SELECT pg_catalog.setval('questioner.questions_q_id_seq', 6, true);
+
+
+--
+-- TOC entry 2861 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: result_description_rd_id_seq; Type: SEQUENCE SET; Schema: questioner; Owner: postgres
+--
+
+SELECT pg_catalog.setval('questioner.result_description_rd_id_seq', 8, true);
+
+
+--
+-- TOC entry 2862 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: results_r_id_seq; Type: SEQUENCE SET; Schema: questioner; Owner: postgres
+--
+
+SELECT pg_catalog.setval('questioner.results_r_id_seq', 53, true);
+
+
+--
+-- TOC entry 2715 (class 2606 OID 16416)
+-- Name: answers answers_pkey; Type: CONSTRAINT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.answers
+    ADD CONSTRAINT answers_pkey PRIMARY KEY (a_id);
+
+
+--
+-- TOC entry 2713 (class 2606 OID 16402)
+-- Name: questions questions_pkey; Type: CONSTRAINT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.questions
+    ADD CONSTRAINT questions_pkey PRIMARY KEY (q_id);
+
+
+--
+-- TOC entry 2719 (class 2606 OID 16438)
+-- Name: result_description result_description_pkey; Type: CONSTRAINT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.result_description
+    ADD CONSTRAINT result_description_pkey PRIMARY KEY (rd_id);
+
+
+--
+-- TOC entry 2717 (class 2606 OID 16427)
+-- Name: results results_pkey; Type: CONSTRAINT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.results
+    ADD CONSTRAINT results_pkey PRIMARY KEY (r_id);
+
+
+--
+-- TOC entry 2720 (class 2606 OID 16439)
+-- Name: answers q_id; Type: FK CONSTRAINT; Schema: questioner; Owner: postgres
+--
+
+ALTER TABLE ONLY questioner.answers
+    ADD CONSTRAINT q_id FOREIGN KEY (q_id) REFERENCES questioner.questions(q_id);
+
+
+-- Completed on 2019-08-06 17:00:46
+
+--
+-- PostgreSQL database dump complete
+--
+
