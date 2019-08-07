@@ -1,10 +1,11 @@
 package com.af.qu.ok.controller;
 
+import com.af.qu.ok.entity.Result;
 import com.af.qu.ok.service.AnswerService;
 import com.af.qu.ok.service.QuestService;
 import com.af.qu.ok.service.ResultDescriptionService;
 import com.af.qu.ok.service.ResultService;
-import com.af.qu.ok.util.QuestMap;
+import com.af.qu.ok.util.ResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/")
-@SessionAttributes("questMap")
+@SessionAttributes("resultSet")
 public class MainController {
 
     @Autowired
@@ -51,28 +52,28 @@ public class MainController {
     }
 
     @PostMapping("/next")
-    public RedirectView next(String name, Integer id, Long q_id, Long a_id, RedirectAttributes attributes,  @ModelAttribute("questMap") QuestMap questMap) {
+    public RedirectView next( Integer id, RedirectAttributes attributes, Result result, @ModelAttribute("resultSet") ResultSet resultSet) {
         id = id == null ? 0 : id;
         id++;
         attributes.addFlashAttribute("id", id);
-        attributes.addFlashAttribute("name", name);
-        questMap.put(q_id, a_id);
+        attributes.addFlashAttribute("name", result.getName());
+        resultSet.add(result);
         return new RedirectView("/test");
     }
 
     @PostMapping("/finish")
-    public String finish(String name, Model model, Long q_id, Long a_id,  @ModelAttribute("questMap") QuestMap questMap) {
-        questMap.put(q_id, a_id);
-        resultService.saveAll(questMap, name);
-        long score =  answerService.getScore(questMap);
-        model.addAttribute("name", name);
+    public String finish( Model model, Result result, @ModelAttribute("resultSet") ResultSet resultSet) {
+        resultSet.add(result);
+        resultService.saveAll(resultSet);
+        long score =  answerService.getScore(resultSet);
+        model.addAttribute("name", result.getName());
         model.addAttribute("score", score );
         model.addAttribute("description",  resultDescriptionService.findCorrectDescription(score).getRd_text());
         return "result";
     }
 
-    @ModelAttribute("questMap")
-    private QuestMap questMap() {
-        return new QuestMap();
+    @ModelAttribute("resultSet")
+    private ResultSet questMap() {
+        return new ResultSet();
     }
 }
